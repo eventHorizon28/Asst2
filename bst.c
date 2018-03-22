@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+#define HEAPSIZE 50
+
 typedef struct _Heap{
 	char* filename;
 	int reps;
@@ -118,49 +120,83 @@ void printSorted(struct BSTNode* temp)
 	free(temp);
 }
 
-void createNode(char * name)
+void addfile(Heap * heap_ptr, char * filename)
+{
+	int i;
+	char* newfile;
+
+	for(i = 0; i < HEAPSIZE; ++i)
+	{
+		if(strcmp(filename, heap_ptr[i]->filename) == 0)
+		{
+			heap_ptr[i]->reps++;
+			heapify(heap_ptr, i);
+		}
+		else if(heap_ptr[i] == 0)
+			break;
+	}
+
+	//this is the first unique filename with that word
+	if(heap_ptr[i] == 0)
+	{
+		newfile = (char*) malloc(strlen(filename)+1);
+		strcpy(newfile, filename);
+		heap_ptr[i]->filename = newfile;
+		heap_ptr[i]->reps = 1;
+	}
+}
+
+void createNode(char * word, char * filename)
 {
 	struct BSTNode * new_node;
 	struct BSTNode * temp = root;
-	char * new_name;
+	char * new_word;
 	int compare_value;
 	
+
+	//if the word has numbers in the starting
+	//
+	//
+
 	if(root == NULL)
 	{
 		new_node = (struct BSTNode*)malloc(sizeof(struct BSTNode));
-		new_name = (char*)malloc((strlen(name)+1)*sizeof(char));
-		strcpy(new_name, name);
-		new_node->str_value = new_name;
-		new_node->reps = 1;
+		new_word = (char*)malloc((strlen(word)+1)*sizeof(char));
+		strcpy(new_word, word);
+		new_node->str_value = new_word;
+		new_node->occurs = (Heap*)calloc(HEAPSIZE, sizeof(Heap));
+		addfile(new_node->occurs, filename);
 		root = new_node;
 		return;
 	}
-	compare_value = compareStrings(name, temp->str_value);
+	compare_value = compareStrings(word, temp->str_value);
 
 	while(1)
 	{
+		//the new string is the same as the string in the current node
 		if(compare_value == 0)
 		{
-			strcmp(
-			temp->occurs[]->reps++;
+			addfile(temp->occurs, filename);
 			return;
 		}
+		//the new string is less priority than the string in the current node, go right
 		else if(compare_value == -1)
 		{
 			if(temp->right == NULL)
 			{
 				new_node = (struct BSTNode*)malloc(sizeof(struct BSTNode));
-				new_name = (char*)malloc((strlen(name)+1)*sizeof(char));
-				strcpy(new_name, name);
-				new_node->str_value = new_name;
-				new_node->reps = 1;
+				new_word = (char*)malloc((strlen(word)+1)*sizeof(char));
+				strcpy(new_word, word);
+				new_node->str_value = new_word;
+				new_node->occurs = (Heap*)calloc(HEAPSIZE, sizeof(Heap));
+				addfile(new_node->occurs, filename);
 				temp->right = new_node;
 				return;
 			}
 			else
 			{
 				temp = temp->right;
-				compare_value = compareStrings(name, temp->str_value);
+				compare_value = compareStrings(word, temp->str_value);
 				continue;
 			}
 		}
@@ -169,17 +205,18 @@ void createNode(char * name)
 			if(temp->left == NULL)
 			{
 				new_node = (struct BSTNode*)malloc(sizeof(struct BSTNode));
-				new_name = (char*)malloc((strlen(name)+1)*sizeof(char));
-				strcpy(new_name, name);
-				new_node->str_value = new_name;
-				new_node->reps = 1;
+				new_word = (char*)malloc((strlen(word)+1)*sizeof(char));
+				strcpy(new_word, word);
+				new_node->str_value = new_word;
+				new_node->occurs = (Heap*)calloc(HEAPSIZE, sizeof(Heap));
+				addfile(new_node->occurs, filename);
 				temp->left = new_node;
 				return;
 			}
 			else
 			{
 				temp = temp->left;
-				compare_value = compareStrings(name, temp->str_value);
+				compare_value = compareStrings(word, temp->str_value);
 				continue;
 			}
 		}
