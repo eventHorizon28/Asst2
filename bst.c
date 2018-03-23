@@ -33,6 +33,7 @@ int findcap (char c, char c2)
 	}                                               
 	return 0;
 }
+//COmpareString function-->Changed the or to  and because of a failed testcase 
 
 int compareStrings(char *str1, char *str2)
 {
