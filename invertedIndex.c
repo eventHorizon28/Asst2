@@ -11,10 +11,12 @@
 
 #define BUFF_SIZE 100
 
+/*
 void createNode(char* token, char* filename)
 {
 	printf("%s %s\n", token, filename);
 }
+*/
 
 void lowerCase(char* word)
 {
@@ -179,4 +181,6 @@ int main(int argc, char** argv)
 	{
 		tokenize(index_fd, argv[2]);
 	}
+
+	printSorted();
 }
