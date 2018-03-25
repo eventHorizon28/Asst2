@@ -140,26 +140,44 @@ void tokenize(int index_fd, char* filename)
 	}
 }
 
-void traverseDir(char* direc)
+void processDir(const char *name)
 {
-	DIR * dirp = opendir(direc);
-	struct dirent * dp;
+    DIR *dir;
+    struct dirent *entry;
+   //IF you have a file run process file  
+    if (!(dir = opendir(name)))
+    
+        return;
 
-	if(!dirp)
-	{
-		printf("Could not open directory %s: ", direc);
-		perror("");
-		return;
-	}
-
-	dp = readdir(dirp);
+while ((entry = readdir(dir)) != NULL) {
 	
-	//while ( dp != NULL)
-		//if dp.d_type = file
-			//tokenize(file fd)
-		//else
-			//traverseDir(directory name)
+        if (entry->d_type == DT_DIR) {
+char * Lastfile(char *name ){
+char *s =name;  
+char *last = strrchr(s, '/');   
+if (last != NULL) {
+    last=last+1;
+    return last;
 }
+if (last == NULL) {
+ return s;   
+}
+	
+}char source[3000];
+            /* recursively print directory contents, except for . and .. */
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+                /* concatenate current path and subdir name */
+            snprintf(source, sizeof(source), "%s/%s", name, entry->d_name);
+            //printf("%*s[%s]\n", indent, "", entry->d_name);
+            processDir(source);
+        } else { 
+			//THiS IS JUST THE FILE
+            //printf("%*s- %s\n", indent, "", entry->d_name);
+        } 
+    }
+    closedir(dir);
+} 
 
 int main(int argc, char** argv)
 {
@@ -199,7 +217,7 @@ int main(int argc, char** argv)
 	{
 		if(errno = EISDIR)
 		{
-			traverseDir(argv[2]);
+			processDir(argv[2]);
 		}
 		
 		else
