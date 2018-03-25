@@ -7,16 +7,15 @@
 #include<fcntl.h>
 #include<string.h>
 #include<dirent.h>
-#include"bst.h"
+//#include"bst.h"
 
-#define BUFF_SIZE 100
+//#define BUFF_SIZE 100
 
-/*
+
 void createNode(char* token, char* filename)
 {
 	printf("%s %s\n", token, filename);
 }
-*/
 
 void lowerCase(char* word)
 {
@@ -31,26 +30,57 @@ void lowerCase(char* word)
 
 void tokenize(int index_fd, char* filename)
 {
-	char buffer[BUFF_SIZE];
+	int buff_size = 100;
+	char * buffer = (char*)malloc(buff_size*sizeof(char));
 	int i = 0, j = 0, temp_file_i = 0;
-	int file_i = read(index_fd, buffer, BUFF_SIZE-1);//reads 99 bytes
+	int file_i = read(index_fd, buffer, buff_size-1);//reads 99 bytes
 	char* buff_ptr = buffer;
 	int prev_buff_len = 0;
+	char * new_buff;
+
+	int null_count = 0;
 	//while there are valid new reads
 	while(file_i + prev_buff_len)
 	{
 		//insert a NULL terminator to the end of the char array
-		buffer[BUFF_SIZE-1] = '\0';
+		buffer[buff_size-1] = '\0';
 
 		//iterate thru the array to interchange non-alphanumeric characters to '\0'
 		for(i = 0; i < file_i+prev_buff_len; ++i)
 		{
 			if(!isalnum(buffer[i]))
+			{
 				buffer[i] = '\0';
+				null_count++;
+			}
+		}
+
+		//if 1 string is more than 100 characters
+		if(null_count == 0)
+		{
+			//expandBuffer
+			new_buff = (char*) malloc ((2*buff_size) * sizeof(char));
+
+			//copy elements
+			for(i = 0; i < buff_size; i++)
+			{
+				new_buff[i] = buffer[i];
+			}
+
+			prev_buff_len = strlen(buffer);
+			buff_size *= 2;
+
+			free(buffer);
+			buffer = new_buff;
+
+			//scan new stuff
+			file_i = read(index_fd, buffer+strlen(buffer), buff_size-1-strlen(buffer));
+			buff_ptr = buffer;
+			continue;
 		}
 
 		//if numBytes is less than 100
-		if((file_i + prev_buff_len) < (BUFF_SIZE-1))
+		if((file_i + prev_buff_len) < (buff_size-1))
 		{
 			//createNode out of all the strings
 			while(buff_ptr < (buffer + file_i + prev_buff_len))
@@ -77,21 +107,21 @@ void tokenize(int index_fd, char* filename)
 				{
 					prev_buff_len = strlen(buff_ptr);
 					//copy the last string to first index
-					for(j = 0; buff_ptr+j < (buffer+BUFF_SIZE); ++j)
+					for(j = 0; buff_ptr+j < (buffer+buff_size); ++j)
 					{
 						buffer[j] = *(buff_ptr+j);
 					}
 
 					//make all other block = '\0'
 					buff_ptr = buffer+strlen(buffer);
-					while(buff_ptr < (buffer+BUFF_SIZE))
+					while(buff_ptr < (buffer+buff_size))
 					{
 						*buff_ptr = '\0';
 						buff_ptr += 1;
 					}
 
 					//read next lines into buffer+strlen(buff_ptr)
-					file_i = read(index_fd, buffer+strlen(buffer), BUFF_SIZE-1);
+					file_i = read(index_fd, buffer+strlen(buffer), buff_size-1-strlen(buffer));
 					buff_ptr = buffer;
 					break;
 				}
@@ -182,5 +212,8 @@ int main(int argc, char** argv)
 		tokenize(index_fd, argv[2]);
 	}
 
-	printSorted();
+//	printSorted();
+
+	close(out_fd);
+	close(index_fd);
 }
