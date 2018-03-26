@@ -10,7 +10,10 @@ files and create an inverted index, which maps each token found in the files to 
 contain that token. In your indexer, you will also maintain the frequency with which each token appears
 in each file. The indexer should tokenize the files and produce an inverted index of how many times
 the word occurred in each file, sorted by word. Your output should be in the following format:
-<?xml version="1.0" encoding="UTF-8"?>
+
+
+Analysis:Since we used a bst and a heap of nodes we expcted  worst case  n^2 for each run through best case  logn^2
+
 <fileIndex>
 <word text=”word0”>
 <file name=”filename0”>count0</file>
