@@ -1,0 +1,5 @@
+wall: Asst0.c
+	 gcc -Wall -Werror -fsanitize=address -o invertedindex invertedindex.c
+
+clean:
+	rm -f invertedindex.c
