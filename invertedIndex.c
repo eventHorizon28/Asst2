@@ -141,7 +141,7 @@ void tokenize(int index_fd, char* filename)
 }
 
 void processDir(const char *name)
-{
+{   int fd;
     DIR *dir;
     struct dirent *entry;
    //IF you have a file run process file  
@@ -172,6 +172,12 @@ if (last == NULL) {
             //printf("%*s[%s]\n", indent, "", entry->d_name);
             processDir(source);
         } else { 
+		fd = open(entry->d_name, O_RDONLY|O_WRONLY);
+		  if (fd < 0)
+ 		  {
+	           exit(1);
+		  }
+		   tokenize(fd,entry->d_name);
 			//THiS IS JUST THE FILE
             //printf("%*s- %s\n", indent, "", entry->d_name);
         } 
@@ -184,7 +190,6 @@ int main(int argc, char** argv)
 	int out_fd;
 	int index_fd;
 	char overwrite;
-
 	if(argc != 3)
 	{
 		printf("ERROR: give output file and directory/file to search\n");
