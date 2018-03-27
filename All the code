@@ -43,7 +43,7 @@ for (i = 0; i < sizeof(heap_ptr); ++i)
       reps1 = heap_ptr->occurs[i].reps;
       if (filename1 != NULL)
 		{
-indx =sprintf(buffer+indx,"<file name=â%sâ>%d</file>\n",filename1,reps1);
+indx =sprintf(buffer+strlen(buffer),"<file name=â%sâ>%d</file>\n",filename1,reps1);
 	  
 	//count++;
 	
