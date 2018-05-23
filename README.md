@@ -29,8 +29,3 @@ Analysis:Since we used a bst and a heap of nodes we expcted  worst case  n^2 for
 
 Built With:
 vim-editor used
-Contributors/Authors
-Kamarudeen Ayankunbi
-Kshitij Bafna
-Acknowledgments
-Professor John-Austen 
