@@ -4,12 +4,12 @@ invertedIndex
 
 Introduction:
 In this assignment we practiced using the file system API (as well as pointers in different
-data structures). In particular you will be creating, opening, reading, writing, and deleting files. Your
-task is to write an indexing program, called an indexer. Given a set of files, an indexer will parse the
+data structures). In particular you will be creating, opening, reading, writing, and deleting files. We
+wrote an indexing program, called an indexer. Given a set of files, an indexer will parse the
 files and create an inverted index, which maps each token found in the files to the subset of files that
-contain that token. In your indexer, you will also maintain the frequency with which each token appears
+contain that token. The indexer will also maintain the frequency with which each token appears
 in each file. The indexer should tokenize the files and produce an inverted index of how many times
-the word occurred in each file, sorted by word. Your output should be in the following format:
+the word occurred in each file, sorted by word.
 
 
 Analysis:Since we used a bst and a heap of nodes we expcted  worst case  n^2 for each run through best case  logn^2
@@ -27,5 +27,5 @@ Analysis:Since we used a bst and a heap of nodes we expcted  worst case  n^2 for
 </fileIndex>
 
 
-Built With:
-vim-editor used
+Editor used:
+vim-editor
